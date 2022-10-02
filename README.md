@@ -10,8 +10,9 @@ This stack is really solid, what I mean about solid? This software has been deve
 
 * postgres:9.6-alpine
 * logstash:7.3.1
-* elasticsearch-oss:7.0.1
-* (optional) dejavu - Elasticsearch client
+* elasticsearch:7.0.1
+* kibana:7.0.1
+* pgadmin
 
 
 ```ditaa
@@ -53,5 +54,4 @@ config file that contains the PGSQL config also the query.
 1. Create a PGSQL database called: test
 2. Insert into a table called customer
 3. Make sure the full-stack is running
-4. Check the result in Dejavu
-   `http://localhost:1358/?appname=customer&url=http://localhost:9200&mode=view`
+4. Check the result in kibana
