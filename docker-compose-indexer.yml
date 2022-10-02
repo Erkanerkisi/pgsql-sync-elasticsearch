@@ -14,10 +14,21 @@ services:
             - ./migrations/:/docker-entrypoint-initdb.d/
         tty: true
         ports:
-            - 5432:5432/tcp
+            - '5432:5432'
         networks:
             - indexernet
-
+    pgadmin:
+        container_name: pgadmin4
+        image: dpage/pgadmin4
+        environment:
+            PGADMIN_DEFAULT_EMAIL: email@email.com
+            PGADMIN_DEFAULT_PASSWORD: 123
+        volumes:
+            - C:\Docker\pgadmin:/var/lib/pgadmin
+        ports:
+            - '8080:80'
+        networks:
+            - indexernet
     # logstash
     logstash: 
         image: docker.elastic.co/logstash/logstash:7.3.1
@@ -37,7 +48,7 @@ services:
 
     # search engine
     elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.0.1
+        image: elasticsearch:7.0.1
         container_name: elasticsearch
         environment:
             - discovery.type=single-node
@@ -57,17 +68,14 @@ services:
             - indexernet
         depends_on:
             - postgres
-
-    # elasticsearch browser
-    dejavu:
-        image: appbaseio/dejavu:3.2.3
-        container_name: dejavu
+    kibana:
+        image: kibana:7.0.1
         ports:
-            - '1358:1358'
-        links:
-            - elasticsearch
+            - "5601:5601"
         networks:
-          - indexernet
+            - indexernet
+        environment:
+            - ELASTICSEARCH_URL=http://elasticsearch:9200
         depends_on:
             - elasticsearch
 volumes:
